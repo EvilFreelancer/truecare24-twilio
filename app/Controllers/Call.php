@@ -50,9 +50,6 @@ class Call
 
         // Get form input
         $userPhone = $params['userPhone'];
-        $encodedSalesPhone = urlencode(str_replace(' ', '', getenv('TWILIO_NUMBER')));
-        // Set URL for outbound call - this should be your public server URL
-        $host = parse_url((string) $request->getUri(), PHP_URL_HOST);
 
         try {
             // Create authenticated REST client using account credentials from environment
@@ -68,7 +65,7 @@ class Call
             $client->calls->create(
                 $userPhone,  // Call this number
                 getenv('TWILIO_NUMBER'), // From a valid Twilio number
-                ['url' => "http://$host/outbound/$encodedSalesPhone"]
+                ['url' => getenv('TWILIO_OUTBOUND_URL')]
             );
         } catch (TwilioException $e) {
             return $e;
@@ -89,7 +86,7 @@ class Call
     public function outbound(Request $request, Response $response, array $args)
     {
         // Get form input
-        $salesPhone = $args['salesPhone'];
+        $salesPhone = getenv('TWILIO_NUMBER');
 
         // A message for Twilio's TTS engine to repeat
         $sayMessage = 'Thanks for contacting our sales department.
