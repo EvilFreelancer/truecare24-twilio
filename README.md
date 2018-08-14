@@ -43,8 +43,7 @@ Now you need prepare docker compose config file:
 |---------------------|-------------|
 | TWILIO_ACCOUNT_SID  | Your personal ID of Twilio account |
 | TWILIO_AUTH_TOKEN   | Authorization token |
-| TWILIO_NUMBER       | Twilio phone number |
-| TWILIO_NUMBER_ADMIN | Admin phone number |
+| TWILIO_NUMBER       | Admin phone number |
 | TWILIO_OUTBOUND_URL | Url for calling to user |
 
 Inside `docker-compose.yml` you need change the values to the ones you
