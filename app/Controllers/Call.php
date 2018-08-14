@@ -49,7 +49,7 @@ class Call
         $params = $request->getParsedBody();
 
         // Get form input
-        $userPhone = $params['userPhone'];
+        $userPhone = preg_replace('!\d+!', '', $params['userPhone']);
 
         try {
             // Create authenticated REST client using account credentials from environment
@@ -61,11 +61,12 @@ class Call
             return $e;
         }
 
+        // On first step we need call the admin
         try {
             $client->calls->create(
-                $userPhone,  // Call this number
-                getenv('TWILIO_NUMBER'), // From a valid Twilio number
-                ['url' => getenv('TWILIO_OUTBOUND_URL')]
+                getenv('TWILIO_NUMBER_ADMIN'),  // Call to this number
+                getenv('TWILIO_NUMBER'),        // From a valid Twilio number
+                ['url' => getenv('TWILIO_OUTBOUND_URL') . '/' . $userPhone]
             );
         } catch (TwilioException $e) {
             return $e;
@@ -86,16 +87,17 @@ class Call
     public function outbound(Request $request, Response $response, array $args)
     {
         // Get form input
-        $salesPhone = getenv('TWILIO_NUMBER');
+        $userPhone = getenv('TWILIO_NUMBER');
 
         // A message for Twilio's TTS engine to repeat
         $sayMessage = 'Thanks for contacting our sales department.
             Our next available representative will take your call.';
 
+        // Then generate XML in which we describe what need call to client
         try {
             $twiml = new \Twilio\Twiml();
             $twiml->say($sayMessage, ['voice' => 'alice']);
-            $twiml->dial($salesPhone);
+            $twiml->dial($userPhone);
         } catch (TwilioException $e) {
             return $e;
         }
