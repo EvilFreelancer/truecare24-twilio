@@ -18,8 +18,7 @@ $(function () {
             method: 'POST',
             dataType: 'json',
             data: {
-                userPhone: $('#userPhone').val(),
-                salesPhone: $('#salesPhone').val()
+                userPhone: $('#userPhone').val()
             }
         }).done(function (data) {
             // The JSON sent back from the server will contain a success message

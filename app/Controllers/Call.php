@@ -49,7 +49,7 @@ class Call
         $params = $request->getParsedBody();
 
         // Get form input
-        $userPhone = preg_replace('!\d+!', '', $params['userPhone']);
+        $userPhone = urlencode(str_replace(' ', '', $params['userPhone']));
 
         try {
             // Create authenticated REST client using account credentials from environment
@@ -87,7 +87,7 @@ class Call
     public function outbound(Request $request, Response $response, array $args)
     {
         // Get form input
-        $userPhone = getenv('TWILIO_NUMBER');
+        $userPhone = $args['userPhone'];
 
         // A message for Twilio's TTS engine to repeat
         $sayMessage = 'Thanks for contacting our sales department.
