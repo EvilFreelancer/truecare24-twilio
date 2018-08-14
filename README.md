@@ -57,9 +57,18 @@ fix that you need just change this line `80:80` to what you need (`7777:80`).
 The shortest instruction out of all, I know, that's because everything
 is already pre-configured via NPM and you just need run it.
 
-## The End
+### Now it works
 
 Now you just need open following page http://localhost in your browser
 and you will get the result of my work.
 
-Thanks for reading!
+## How use Docker container
+
+Build the image of container
+
+    docker build . --tag tc24-twilio
+
+Run container on `80` port, mount into container files from current
+folder and mount apache logs to logs folder.
+
+    docker run -v `pwd`/logs:/var/log/apache2 -v `pwd`:/app -p 80:80 test:latest
